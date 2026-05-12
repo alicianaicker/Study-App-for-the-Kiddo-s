@@ -3,452 +3,834 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Study Buddy – Fun Exam Helper</title>
+    <title>StudyBuddy Pro | Smart Exam Helper</title>
     <style>
         * {
-            box-sizing: border-box;
-            font-family: system-ui, 'Comic Neue', 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
-        }
-        body {
-            background: linear-gradient(145deg, #ffecd2 0%, #fcb69f 100%);
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg-light: #f8fafc;
+            --card-light: #ffffff;
+            --text-light: #1e293b;
+            --text-muted-light: #64748b;
+            --border-light: #e2e8f0;
+            
+            --bg-dark: #0f172a;
+            --card-dark: #1e293b;
+            --text-dark: #f1f5f9;
+            --text-muted-dark: #94a3b8;
+            --border-dark: #334155;
+            
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-light);
             min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
         }
+
+        body.dark {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        /* Layout */
         .app-container {
-            max-width: 700px;
+            max-width: 1400px;
             margin: 0 auto;
-            background: rgba(255,255,240,0.95);
-            border-radius: 70px 70px 70px 40px;
-            padding: 20px 25px 35px;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.2);
-            backdrop-filter: blur(2px);
-        }
-        h1 {
-            font-size: 2.4rem;
-            margin: 0 0 5px;
-            color: #c4450c;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        h1 span {
-            background: #ffb347;
-            font-size: 1.3rem;
-            padding: 5px 15px;
-            border-radius: 50px;
-            color: white;
-        }
-        .tab-bar {
-            display: flex;
-            gap: 12px;
-            margin: 20px 0 15px;
-            flex-wrap: wrap;
-        }
-        .tab {
-            background: #ffd89a;
-            padding: 10px 18px;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-            border: none;
-            font-size: 1rem;
-            color: #5a2a0c;
-        }
-        .tab.active {
-            background: #f77f00;
-            color: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .panel {
-            display: none;
-            animation: fade 0.3s ease;
-        }
-        .panel.active-panel {
-            display: block;
-        }
-        @keyframes fade {
-            from { opacity: 0; transform: translateY(8px);}
-            to { opacity: 1; transform: translateY(0);}
-        }
-        .card {
-            background: #fffaf2;
-            border-radius: 48px;
             padding: 20px;
-            margin: 20px 0;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.08);
         }
-        input, textarea, button, select {
-            border-radius: 60px;
-            border: 2px solid #ffce9e;
-            padding: 12px 18px;
-            font-size: 1rem;
-            width: 100%;
-            margin: 8px 0;
-            background: white;
-        }
-        button {
-            background: #f39c12;
-            color: white;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        button:active { transform: scale(0.97);}
-        .exam-item, .revision-note {
-            background: #fdebd0;
-            margin: 12px 0;
-            padding: 15px;
-            border-radius: 30px;
+
+        /* Header */
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-light);
         }
-        .exam-info strong { color: #c4450c; font-size: 1.2rem;}
-        .delete-btn {
-            background: #e67e22;
-            width: auto;
-            padding: 8px 16px;
-            font-size: 0.8rem;
+        body.dark .header { border-bottom-color: var(--border-dark); }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-        .upload-area {
-            border: 3px dashed #f7b05e;
-            background: #fff5e8;
+        .logo p { font-size: 0.85rem; opacity: 0.7; }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-secondary { background: var(--secondary); color: white; }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border-light);
+            color: var(--text-light);
+        }
+        body.dark .btn-outline { border-color: var(--border-dark); color: var(--text-dark); }
+        .theme-btn { font-size: 1.2rem; padding: 8px 16px; }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            background: var(--card-light);
+            padding: 8px;
+            border-radius: 20px;
+        }
+        body.dark .tabs { background: var(--card-dark); }
+        .tab {
+            padding: 12px 24px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+            color: var(--text-muted-light);
+        }
+        body.dark .tab { color: var(--text-muted-dark); }
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-light);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        body.dark .card { background: var(--card-dark); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); }
+        .card:hover { transform: translateY(-2px); }
+
+        .card h2, .card h3 {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Forms */
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-light);
+            border-radius: 16px;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            background: var(--card-light);
+            color: var(--text-light);
+        }
+        body.dark input, body.dark textarea {
+            border-color: var(--border-dark);
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+        input:focus, textarea:focus { outline: none; border-color: var(--primary); }
+
+        /* Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        /* Exam items */
+        .exam-card {
+            background: var(--bg-light);
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border-left: 4px solid var(--primary);
+        }
+        body.dark .exam-card { background: var(--bg-dark); }
+
+        /* Study timer */
+        .timer-display {
+            font-size: 3rem;
+            font-family: monospace;
+            font-weight: bold;
             text-align: center;
-            padding: 18px;
-            border-radius: 50px;
+            margin: 20px 0;
+        }
+        .timer-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Progress bars */
+        .progress-bar {
+            height: 8px;
+            background: var(--border-light);
+            border-radius: 10px;
+            overflow: hidden;
             margin: 10px 0;
         }
-        .question-box {
-            background: #ffefdb;
-            padding: 18px;
-            border-radius: 35px;
-            margin-top: 15px;
-            border-left: 12px solid #f77f00;
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            transition: width 0.3s;
         }
-        .flex-btns {
-            display: flex;
-            gap: 10px;
+
+        /* Stats */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
         }
-        footer {
-            font-size: 0.7rem;
+        .stat-card {
             text-align: center;
-            color: #a9662e;
-            margin-top: 20px;
+            padding: 20px;
+            background: var(--bg-light);
+            border-radius: 20px;
         }
-        @media (max-width: 500px) {
-            body { padding: 10px; }
-            .app-container { padding: 15px; }
+        body.dark .stat-card { background: var(--bg-dark); }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* File upload */
+        .upload-zone {
+            border: 3px dashed var(--border-light);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        body.dark .upload-zone { border-color: var(--border-dark); }
+        .upload-zone:hover { border-color: var(--primary); background: rgba(99,102,241,0.05); }
+
+        /* Question boxes */
+        .quiz-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 30px;
+            border-radius: 24px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* Parent section */
+        .parent-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        body.dark .parent-section { background: linear-gradient(135deg, #4f46e5, #7c3aed); }
+
+        /* Utility */
+        .hidden { display: none; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        .mt-4 { margin-top: 16px; }
+        .mb-4 { margin-bottom: 16px; }
+        .text-center { text-align: center; }
+        .w-100 { width: 100%; }
+
+        @media (max-width: 768px) {
+            .app-container { padding: 12px; }
+            .timer-display { font-size: 2rem; }
+            .btn { padding: 8px 16px; }
         }
     </style>
 </head>
 <body>
-<div class="app-container">
-    <h1>📚 Study Buddy <span>🎮 fun zone</span></h1>
-    <div class="tab-bar">
-        <button class="tab active" data-tab="exam">📅 Exam Timetable</button>
-        <button class="tab" data-tab="upload">📤 Upload PDF/Image</button>
-        <button class="tab" data-tab="quiz">🧠 Quiz Me + Notes</button>
-    </div>
-
-    <!-- EXAM TIMETABLE PANEL -->
-    <div id="examPanel" class="panel active-panel">
-        <div class="card">
-            <h2>➕ Add exam</h2>
-            <input type="text" id="subjectName" placeholder="Subject (e.g. Maths, Science)" autocomplete="off">
-            <input type="date" id="examDate">
-            <input type="time" id="examTime">
-            <textarea rows="2" id="topicsList" placeholder="What to learn? e.g. Fractions, plants, spelling"></textarea>
-            <button id="saveExamBtn">📌 Save exam</button>
-        </div>
-        <div class="card">
-            <h2>📋 Your exams</h2>
-            <div id="examList"></div>
-        </div>
-    </div>
-
-    <!-- UPLOAD IMAGES/PDF PANEL -->
-    <div id="uploadPanel" class="panel">
-        <div class="card">
-            <h2>📎 Add study material</h2>
-            <div class="upload-area" id="dropzone">
-                📂 Tap or drag PDF / Image here<br>
-                <input type="file" id="fileInput" accept="image/*,application/pdf" multiple style="display:none;">
-                <button id="chooseFileBtn" style="background:#ffb347; margin-top:10px;">📁 Choose file</button>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <h1>📚 StudyBuddy Pro</h1>
+                <p>Smart revision for smart kids ✨</p>
             </div>
-            <div id="uploadedFilesList"></div>
-            <button id="generateFromFilesBtn" style="background:#e67e22;">✨ Generate notes & questions from all files</button>
+            <div class="header-actions">
+                <button class="btn btn-outline" id="parentBtn">👨‍👩‍👧 Parent Dashboard</button>
+                <button class="btn theme-btn" id="themeToggle">🌙</button>
+            </div>
         </div>
-        <div class="card">
-            <h3>📖 Saved notes (auto from files)</h3>
-            <div id="autoNotesList"></div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" data-tab="home">🏠 Home</button>
+            <button class="tab" data-tab="timetable">📅 Timetable</button>
+            <button class="tab" data-tab="study">⏱️ Study Session</button>
+            <button class="tab" data-tab="upload">📤 Upload</button>
+            <button class="tab" data-tab="quiz">🧠 Quiz</button>
+        </div>
+
+        <!-- Home Tab -->
+        <div id="homeTab" class="tab-content">
+            <div class="grid-2">
+                <div class="card">
+                    <h2>🎯 Today's Focus</h2>
+                    <div id="todayExams"></div>
+                </div>
+                <div class="card">
+                    <h2>📊 Your Progress</h2>
+                    <div class="stat-grid" id="quickStats"></div>
+                </div>
+            </div>
+            <div class="card">
+                <h2>⭐ Study Streak</h2>
+                <div class="progress-bar"><div class="progress-fill" id="streakBar" style="width: 0%"></div></div>
+                <p class="text-center" id="streakText">Keep studying daily!</p>
+            </div>
+        </div>
+
+        <!-- Timetable Tab -->
+        <div id="timetableTab" class="tab-content hidden">
+            <div class="card">
+                <h2>➕ Add New Exam</h2>
+                <input type="text" id="examSubject" placeholder="Subject (e.g., Maths, Science)">
+                <input type="date" id="examDate">
+                <input type="time" id="examTime">
+                <textarea id="examTopics" rows="3" placeholder="Topics to study..."></textarea>
+                <button class="btn btn-primary w-100" id="addExamBtn">💾 Save Exam</button>
+            </div>
+            <div class="card">
+                <h2>📋 Upcoming Exams</h2>
+                <div id="examList"></div>
+            </div>
+        </div>
+
+        <!-- Study Timer Tab -->
+        <div id="studyTab" class="tab-content hidden">
+            <div class="card text-center">
+                <h2>⏱️ Focus Timer</h2>
+                <div class="timer-display" id="timerDisplay">00:00:00</div>
+                <div class="timer-buttons">
+                    <button class="btn btn-primary" id="startTimer">▶️ Start</button>
+                    <button class="btn btn-outline" id="pauseTimer">⏸️ Pause</button>
+                    <button class="btn btn-outline" id="resetTimer">🔄 Reset</button>
+                </div>
+                <div class="mt-4">
+                    <label>What are you studying?</label>
+                    <input type="text" id="studySubject" placeholder="e.g., Maths - Fractions">
+                    <button class="btn btn-secondary" id="logStudyBtn" style="margin-top: 8px;">✅ Log this session</button>
+                </div>
+            </div>
+            <div class="card">
+                <h2>📖 Today's Study Log</h2>
+                <div id="todayStudyLog"></div>
+            </div>
+        </div>
+
+        <!-- Upload Tab -->
+        <div id="uploadTab" class="tab-content hidden">
+            <div class="card">
+                <h2>📎 Upload Study Material</h2>
+                <div class="upload-zone" id="uploadZone">
+                    📂 Tap or drag PDF / Image here<br>
+                    <small>Supports: JPG, PNG, PDF</small>
+                    <input type="file" id="fileInput" accept="image/*,application/pdf" multiple style="display:none;">
+                    <button class="btn btn-primary" id="chooseFileBtn" style="margin-top: 16px;">Choose Files</button>
+                </div>
+                <div id="fileList" class="mt-4"></div>
+                <button class="btn btn-secondary w-100" id="generateNotesBtn">✨ Auto-Generate Questions & Notes</button>
+            </div>
+            <div class="card">
+                <h3>📝 Generated Study Notes</h3>
+                <div id="generatedNotes"></div>
+            </div>
+        </div>
+
+        <!-- Quiz Tab -->
+        <div id="quizTab" class="tab-content hidden">
+            <div class="card text-center">
+                <h2>🎲 Random Quiz</h2>
+                <button class="btn btn-primary" id="newQuizBtn">🎉 New Question</button>
+                <div id="quizQuestion" class="quiz-card" style="margin-top: 20px;">
+                    Click the button to start!
+                </div>
+                <div class="mt-4">
+                    <button class="btn btn-outline" id="showAnswerBtn">🔍 Show Answer Hint</button>
+                </div>
+            </div>
+            <div class="card">
+                <h2>📚 All Study Questions</h2>
+                <div id="allQuestions"></div>
+            </div>
+        </div>
+
+        <!-- Parent Modal (hidden by default) -->
+        <div id="parentModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:1000; overflow:auto; padding:20px;">
+            <div class="card" style="max-width:800px; margin:50px auto;">
+                <div class="flex-between">
+                    <h2>👨‍👩‍👧 Parent Dashboard</h2>
+                    <button class="btn btn-outline" id="closeModalBtn">✖️ Close</button>
+                </div>
+                <div id="parentStats"></div>
+                <div class="mt-4">
+                    <h3>📊 Study Summary</h3>
+                    <div id="parentStudyLog"></div>
+                </div>
+                <div class="mt-4">
+                    <h3>🎯 Exam Progress</h3>
+                    <div id="parentExams"></div>
+                </div>
+                <button class="btn btn-danger w-100 mt-4" id="exportDataBtn">📧 Export Study Report</button>
+            </div>
         </div>
     </div>
 
-    <!-- QUIZ + REVISION PANEL -->
-    <div id="quizPanel" class="panel">
-        <div class="card">
-            <h2>🧪 Active recall fun</h2>
-            <button id="generateRandomQuizBtn">🎲 Surprise quiz from your files!</button>
-            <div id="quizDisplay" style="margin-top:20px;"></div>
-        </div>
-        <div class="card">
-            <h2>📝 All revision notes & questions</h2>
-            <div id="allRevisionContent"></div>
-        </div>
-    </div>
-    <footer>⭐ Everything saved on YOUR device only. Add photos of worksheets → auto study help!</footer>
-</div>
+    <script>
+        // ========== STORAGE KEYS ==========
+        let exams = JSON.parse(localStorage.getItem('sb_exams')) || [];
+        let studySessions = JSON.parse(localStorage.getItem('sb_sessions')) || [];
+        let uploadedFiles = JSON.parse(localStorage.getItem('sb_files')) || [];
+        let questions = JSON.parse(localStorage.getItem('sb_questions')) || [];
+        
+        // Timer variables
+        let timerInterval = null;
+        let timerSeconds = 0;
+        let isTimerRunning = false;
 
-<script>
-    // ----- LOCAL STORAGE KEYS -----
-    let exams = JSON.parse(localStorage.getItem('study_exams')) || [];
-    let uploadedFilesMeta = JSON.parse(localStorage.getItem('study_files')) || []; // store name + type + dataURL (small)
-    let revisionItems = JSON.parse(localStorage.getItem('study_revision_notes')) || []; // {text, type:"question/note", sourceFile}
-
-    // helper saves
-    function saveAll() {
-        localStorage.setItem('study_exams', JSON.stringify(exams));
-        localStorage.setItem('study_files', JSON.stringify(uploadedFilesMeta));
-        localStorage.setItem('study_revision_notes', JSON.stringify(revisionItems));
-        renderExamList();
-        renderUploadedFiles();
-        renderAutoNotesAndQuestions();
-        renderAllRevisionContent();
-    }
-
-    // ----- RENDER EXAMS -----
-    function renderExamList() {
-        const container = document.getElementById('examList');
-        if(!container) return;
-        if(exams.length === 0) {
-            container.innerHTML = '<div class="exam-item">🎯 No exams yet. Add your first exam!</div>';
-            return;
+        // ========== HELPER FUNCTIONS ==========
+        function saveAll() {
+            localStorage.setItem('sb_exams', JSON.stringify(exams));
+            localStorage.setItem('sb_sessions', JSON.stringify(studySessions));
+            localStorage.setItem('sb_files', JSON.stringify(uploadedFiles));
+            localStorage.setItem('sb_questions', JSON.stringify(questions));
+            renderAll();
         }
-        container.innerHTML = exams.map((exam, idx) => `
-            <div class="exam-item">
-                <div><strong>${escapeHtml(exam.subject)}</strong><br>
-                📅 ${exam.date || 'No date'} ⏰ ${exam.time || 'any time'}<br>
-                📖 ${escapeHtml(exam.topics || 'No topics added')}</div>
-                <button class="delete-btn" data-idx="${idx}">🗑️ Done</button>
-            </div>
-        `).join('');
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const idx = parseInt(btn.dataset.idx);
-                exams.splice(idx,1);
-                saveAll();
-            });
-        });
-    }
 
-    // ----- UPLOAD FILES (store as dataURL for small docs, for PDF we extract simple mock text)
-    function storeFile(file) {
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                let contentHint = "";
-                let fileType = file.type;
-                let name = file.name;
-                // For images, we just extract a simple message (since AI would need vision, we simulate by making generic topic)
-                if(fileType.startsWith('image/')) {
-                    contentHint = `[Image: ${name}] – Look at this picture for revision. Try to describe or explain what you see.`;
-                } else if(fileType === 'application/pdf') {
-                    contentHint = `[PDF document: ${name}] – This PDF has important study info. Read through and practice main ideas.`;
-                } else {
-                    contentHint = `[File: ${name}] – Review this material.`;
+        function formatDate(date = new Date()) {
+            return date.toISOString().split('T')[0];
+        }
+
+        function formatTime(seconds) {
+            const hrs = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            return `${hrs.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+        }
+
+        // ========== TIMER ==========
+        function updateTimerDisplay() {
+            document.getElementById('timerDisplay').innerText = formatTime(timerSeconds);
+        }
+
+        function startTimer() {
+            if (isTimerRunning) return;
+            isTimerRunning = true;
+            timerInterval = setInterval(() => {
+                if (isTimerRunning) {
+                    timerSeconds++;
+                    updateTimerDisplay();
                 }
-                const fileRecord = {
-                    id: Date.now() + Math.random(),
-                    name: name,
-                    type: fileType,
-                    dataURL: e.target.result, // stores image/pdf base64 (can be large, but fine for small files)
-                    extractedText: contentHint
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            isTimerRunning = false;
+            if (timerInterval) clearInterval(timerInterval);
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            timerSeconds = 0;
+            updateTimerDisplay();
+        }
+
+        function logStudySession() {
+            const subject = document.getElementById('studySubject').value.trim();
+            if (!subject) {
+                alert("Please enter what you studied!");
+                return;
+            }
+            if (timerSeconds < 60) {
+                alert("Please study for at least 1 minute before logging!");
+                return;
+            }
+            studySessions.push({
+                date: formatDate(),
+                subject: subject,
+                duration: timerSeconds,
+                timestamp: Date.now()
+            });
+            resetTimer();
+            document.getElementById('studySubject').value = '';
+            saveAll();
+            alert(`✅ Logged ${formatTime(timerSeconds)} of ${subject}! Great job! 🎉`);
+        }
+
+        // ========== EXAMS ==========
+        function addExam() {
+            const subject = document.getElementById('examSubject').value.trim();
+            const date = document.getElementById('examDate').value;
+            const time = document.getElementById('examTime').value;
+            const topics = document.getElementById('examTopics').value.trim();
+            if (!subject) { alert("Please enter a subject!"); return; }
+            exams.push({ subject, date, time, topics, id: Date.now() });
+            saveAll();
+            document.getElementById('examSubject').value = '';
+            document.getElementById('examDate').value = '';
+            document.getElementById('examTime').value = '';
+            document.getElementById('examTopics').value = '';
+        }
+
+        function deleteExam(id) {
+            exams = exams.filter(e => e.id !== id);
+            saveAll();
+        }
+
+        // ========== FILE UPLOAD ==========
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedFiles.push({
+                        id: Date.now() + Math.random(),
+                        name: file.name,
+                        type: file.type,
+                        data: e.target.result
+                    });
+                    // Auto-generate a basic question from filename
+                    questions.push({
+                        text: `📄 From "${file.name}": What did you learn from this material?`,
+                        hint: `Review ${file.name} and write down 3 key points.`,
+                        source: file.name,
+                        timestamp: Date.now()
+                    });
+                    saveAll();
                 };
-                uploadedFilesMeta.push(fileRecord);
-                // auto generate a revision note from this file
-                revisionItems.push({
-                    text: `📎 From "${name}": ${contentHint.substring(0,200)}. Create 1 question: What is the main topic?`,
-                    type: 'auto-note',
-                    source: name,
-                    timestamp: Date.now()
-                });
-                saveAll();
-                resolve();
+                reader.readAsDataURL(file);
+            });
+            setTimeout(() => { renderAll(); alert(`✅ Added ${files.length} file(s)! Click "Generate Notes" for more questions.`); }, 500);
+        }
+
+        function generateQuestionsFromFiles() {
+            if (uploadedFiles.length === 0) {
+                alert("Please upload some files first!");
+                return;
+            }
+            let newCount = 0;
+            uploadedFiles.forEach(file => {
+                const fileName = file.name;
+                if (!questions.some(q => q.text.includes(fileName) && q.text.includes("important"))) {
+                    questions.push({
+                        text: `❓ From ${fileName}: What is the most important concept?`,
+                        hint: `Think about the main idea from ${fileName}`,
+                        source: fileName,
+                        timestamp: Date.now()
+                    });
+                    questions.push({
+                        text: `📘 Challenge: Explain ${fileName} to someone in 2 sentences.`,
+                        hint: `Pretend you're the teacher!`,
+                        source: fileName,
+                        timestamp: Date.now()
+                    });
+                    newCount += 2;
+                }
+            });
+            saveAll();
+            alert(`✨ Generated ${newCount} new study questions! Go to Quiz tab!`);
+        }
+
+        // ========== QUIZ ==========
+        function showRandomQuiz() {
+            if (questions.length === 0) {
+                document.getElementById('quizQuestion').innerHTML = `
+                    <div>📭 No questions yet! Upload some study materials first.</div>
+                `;
+                return;
+            }
+            const random = questions[Math.floor(Math.random() * questions.length)];
+            document.getElementById('quizQuestion').innerHTML = `
+                <div style="font-size:1.2rem; margin-bottom:10px;">🎲 Question ${Math.floor(Math.random()*100)+1}</div>
+                <div style="font-size:1.4rem; font-weight:600;">${escapeHtml(random.text)}</div>
+                <div id="quizHint" style="margin-top:16px; font-size:0.9rem; opacity:0;"></div>
+            `;
+            window.currentHint = random.hint;
+        }
+
+        function showAnswerHint() {
+            const hintDiv = document.querySelector('#quizQuestion #quizHint');
+            if (hintDiv && window.currentHint) {
+                hintDiv.innerHTML = `💡 Hint: ${escapeHtml(window.currentHint)}`;
+                hintDiv.style.opacity = '1';
+            } else if (!window.currentHint) {
+                alert("No hint available for this question!");
+            }
+        }
+
+        // ========== PARENT DASHBOARD ==========
+        function showParentDashboard() {
+            const modal = document.getElementById('parentModal');
+            const totalStudyTime = studySessions.reduce((sum, s) => sum + s.duration, 0);
+            const todayStudy = studySessions.filter(s => s.date === formatDate()).reduce((sum, s) => sum + s.duration, 0);
+            const uniqueSubjects = [...new Set(studySessions.map(s => s.subject))];
+            const completedQuestions = questions.length;
+            
+            document.getElementById('parentStats').innerHTML = `
+                <div class="stat-grid">
+                    <div class="stat-card"><div class="stat-number">${formatTime(totalStudyTime)}</div><div>Total Study Time</div></div>
+                    <div class="stat-card"><div class="stat-number">${formatTime(todayStudy)}</div><div>Today's Study</div></div>
+                    <div class="stat-card"><div class="stat-number">${uniqueSubjects.length}</div><div>Subjects Studied</div></div>
+                    <div class="stat-card"><div class="stat-number">${completedQuestions}</div><div>Questions Created</div></div>
+                    <div class="stat-card"><div class="stat-number">${exams.length}</div><div>Exams Scheduled</div></div>
+                    <div class="stat-card"><div class="stat-number">${uploadedFiles.length}</div><div>Files Uploaded</div></div>
+                </div>
+            `;
+            
+            const last7Days = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                const dayStudy = studySessions.filter(s => s.date === dateStr).reduce((sum, s) => sum + s.duration, 0);
+                last7Days.push({ date: dateStr, minutes: Math.floor(dayStudy / 60) });
+            }
+            
+            document.getElementById('parentStudyLog').innerHTML = `
+                <h4>📈 Last 7 Days (minutes)</h4>
+                ${last7Days.map(d => `<div class="flex-between"><span>${d.date}</span><span>${d.minutes} min</span><div class="progress-bar" style="flex:1; margin-left:10px;"><div class="progress-fill" style="width: ${Math.min(100, d.minutes * 2)}%"></div></div></div>`).join('')}
+                <h4 class="mt-4">📋 Recent Sessions</h4>
+                ${studySessions.slice(-5).reverse().map(s => `<div class="exam-card">📖 ${s.subject} - ${formatTime(s.duration)} on ${s.date}</div>`).join('')}
+            `;
+            
+            document.getElementById('parentExams').innerHTML = exams.map(e => `
+                <div class="exam-card">📅 ${e.subject} - Due ${e.date || 'No date'} ${e.time || ''}<br><small>📖 ${e.topics || 'No topics'}</small></div>
+            `).join('') || '<p>No exams scheduled yet</p>';
+            
+            modal.style.display = 'block';
+        }
+        
+        function exportData() {
+            const report = {
+                exported: new Date().toISOString(),
+                totalStudySeconds: studySessions.reduce((s,sum) => s + sum.duration, 0),
+                sessions: studySessions,
+                exams: exams,
+                questionsCount: questions.length
             };
-            reader.readAsDataURL(file);
-        });
-    }
+            const dataStr = JSON.stringify(report, null, 2);
+            const blob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `study-report-${formatDate()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            alert("Report exported! You can view it with any text editor.");
+        }
 
-    async function handleFiles(files) {
-        for(let file of files) {
-            if(file.size > 2 * 1024 * 1024) { // 2MB limit for local storage comfort
-                alert(`${file.name} is large >2MB, but we'll try. For better speed use <2MB.`);
+        // ========== RENDER ALL UI ==========
+        function renderExamList() {
+            const container = document.getElementById('examList');
+            if (!container) return;
+            if (exams.length === 0) {
+                container.innerHTML = '<div class="exam-card">📭 No exams yet. Add your first exam above!</div>';
+                return;
             }
-            await storeFile(file);
+            container.innerHTML = exams.map(exam => `
+                <div class="exam-card">
+                    <div><strong>${escapeHtml(exam.subject)}</strong><br>📅 ${exam.date || 'TBD'} ${exam.time || ''}<br>📖 ${escapeHtml(exam.topics || 'No topics')}</div>
+                    <button class="btn btn-outline" onclick="deleteExam(${exam.id})" style="padding:6px 12px;">🗑️ Delete</button>
+                </div>
+            `).join('');
         }
-        renderUploadedFiles();
-        renderAutoNotesAndQuestions();
-    }
 
-    function renderUploadedFiles() {
-        const container = document.getElementById('uploadedFilesList');
-        if(!container) return;
-        if(uploadedFilesMeta.length === 0) {
-            container.innerHTML = '<div>✨ No files uploaded yet. Add your worksheet/notes PDF or image!</div>';
-            return;
-        }
-        container.innerHTML = uploadedFilesMeta.map((f, idx) => `
-            <div class="exam-item" style="justify-content:space-between;">
-                <span>📄 ${escapeHtml(f.name)} (${f.type.split('/')[1] || 'file'})</span>
-                <button class="delete-file" data-id="${f.id}">❌ Remove</button>
-            </div>
-        `).join('');
-        document.querySelectorAll('.delete-file').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const id = parseFloat(btn.dataset.id);
-                uploadedFilesMeta = uploadedFilesMeta.filter(f => f.id !== id);
-                // also remove revision items linked to that file
-                revisionItems = revisionItems.filter(r => r.source !== (uploadedFilesMeta.find(f=>f.id===id)?.name));
-                saveAll();
-            });
-        });
-    }
-
-    // generate notes/questions from all files using a smart kid-friendly extraction
-    function generateSmartContentFromFiles() {
-        if(uploadedFilesMeta.length === 0) {
-            alert("Please upload some images or PDFs first!");
-            return;
-        }
-        let newNotesCount = 0;
-        uploadedFilesMeta.forEach(file => {
-            let baseMessage = file.extractedText || `Study content: ${file.name}`;
-            // create 2-3 revision prompts
-            const question1 = `❓ Question from ${file.name}: What is one key fact you remember?`;
-            const note1 = `📘 Revision note: Look at ${file.name} and try to explain it to a friend.`;
-            const question2 = `❓ Challenge: Write down 3 words from ${file.name} that are important.`;
-            // avoid duplicates: check if we already have similar
-            const alreadyHas = revisionItems.some(r => r.text.includes(file.name) && r.text.includes("key fact"));
-            if(!alreadyHas) {
-                revisionItems.push({ text: question1, type: 'question', source: file.name, timestamp: Date.now() });
-                revisionItems.push({ text: note1, type: 'note', source: file.name, timestamp: Date.now() });
-                revisionItems.push({ text: question2, type: 'question', source: file.name, timestamp: Date.now() });
-                newNotesCount += 3;
+        function renderTodayExams() {
+            const container = document.getElementById('todayExams');
+            if (!container) return;
+            const today = formatDate();
+            const todayExams = exams.filter(e => e.date === today);
+            if (todayExams.length === 0) {
+                container.innerHTML = '<div class="exam-card">🎉 No exams today! Great time to review.</div>';
+            } else {
+                container.innerHTML = todayExams.map(e => `<div class="exam-card">⚠️ ${e.subject} exam today! ${e.time ? `at ${e.time}` : ''}<br>Study: ${e.topics || 'all topics'}</div>`).join('');
             }
-        });
-        saveAll();
-        alert(`✨ Generated ${newNotesCount} new study questions + notes from your files! Go to "Quiz Me" tab.`);
-    }
-
-    function renderAutoNotesAndQuestions() {
-        const container = document.getElementById('autoNotesList');
-        if(!container) return;
-        const recent = revisionItems.slice(-8).reverse();
-        container.innerHTML = recent.map(r => `<div class="question-box">📌 ${escapeHtml(r.text)} <span style="font-size:0.7rem;">(${r.source || 'study'})</span></div>`).join('');
-        if(recent.length === 0) container.innerHTML = '<div>💡 Upload a file & click "Generate notes" → they appear here!</div>';
-    }
-
-    function renderAllRevisionContent() {
-        const container = document.getElementById('allRevisionContent');
-        if(!container) return;
-        if(revisionItems.length === 0) {
-            container.innerHTML = '<div class="card">📭 No notes or Qs yet. Upload a picture of your workbook!</div>';
-            return;
         }
-        container.innerHTML = revisionItems.slice().reverse().map(r => `
-            <div class="question-box">
-                <strong>${r.type === 'question' ? '🧠 QUIZ:' : '📘 NOTE:'}</strong> ${escapeHtml(r.text)}
-                <div style="font-size:12px; opacity:0.7;">📎 ${r.source || 'general'}</div>
-                <button class="removeRevisionBtn" data-ts="${r.timestamp}" style="background:#e67e22; padding:4px 12px; margin-top:8px;">🗑️ remove</button>
-            </div>
-        `).join('');
-        document.querySelectorAll('.removeRevisionBtn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const ts = parseInt(btn.dataset.ts);
-                revisionItems = revisionItems.filter(r => r.timestamp !== ts);
-                saveAll();
-            });
-        });
-    }
 
-    // RANDOM QUIZ
-    function showRandomQuiz() {
-        const quizDiv = document.getElementById('quizDisplay');
-        const questionsOnly = revisionItems.filter(r => r.type === 'question' || r.text.includes('❓') || r.text.includes('Question'));
-        if(questionsOnly.length === 0) {
-            quizDiv.innerHTML = '<div class="question-box">🎯 No quiz questions yet. Upload a study PDF/image and click "✨ Generate notes & questions"! 🎯</div>';
-            return;
+        function renderQuickStats() {
+            const container = document.getElementById('quickStats');
+            if (!container) return;
+            const todayStudy = studySessions.filter(s => s.date === formatDate()).reduce((sum, s) => sum + s.duration, 0);
+            const weekStudy = studySessions.filter(s => {
+                const sessionDate = new Date(s.date);
+                const weekAgo = new Date();
+                weekAgo.setDate(weekAgo.getDate() - 7);
+                return sessionDate >= weekAgo;
+            }).reduce((sum, s) => sum + s.duration, 0);
+            container.innerHTML = `
+                <div class="stat-card"><div class="stat-number">${formatTime(todayStudy)}</div><div>Today's Study</div></div>
+                <div class="stat-card"><div class="stat-number">${formatTime(weekStudy)}</div><div>This Week</div></div>
+                <div class="stat-card"><div class="stat-number">${questions.length}</div><div>Quiz Questions</div></div>
+            `;
         }
-        const randomQ = questionsOnly[Math.floor(Math.random() * questionsOnly.length)];
-        quizDiv.innerHTML = `
-            <div class="question-box" style="background:#ffd9b5;">
-                <div style="font-size:1.7rem;">🎲 Pop quiz!</div>
-                <p style="font-size:1.2rem;"><strong>${escapeHtml(randomQ.text)}</strong></p>
-                <p>💡 Say your answer out loud or write it down! Then click another quiz.</p>
-                <button id="nextQuizBtn" style="background:#f39c12;">🎉 Next question</button>
-            </div>
-        `;
-        document.getElementById('nextQuizBtn')?.addEventListener('click', showRandomQuiz);
-    }
 
-    // ----- HELPERS & EVENT LISTENERS -----
-    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;});}
-
-    // TABS
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-            tab.classList.add('active');
-            document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active-panel'));
-            const targetId = tab.dataset.tab + 'Panel';
-            document.getElementById(targetId).classList.add('active-panel');
-        });
-    });
-
-    // Add exam
-    document.getElementById('saveExamBtn')?.addEventListener('click', () => {
-        const subject = document.getElementById('subjectName').value.trim();
-        const date = document.getElementById('examDate').value;
-        const time = document.getElementById('examTime').value;
-        const topics = document.getElementById('topicsList').value.trim();
-        if(!subject) { alert("Please add a subject name!"); return; }
-        exams.push({ subject, date, time, topics });
-        saveAll();
-        document.getElementById('subjectName').value = '';
-        document.getElementById('topicsList').value = '';
-    });
-
-    // File upload logic
-    const fileInput = document.getElementById('fileInput');
-    document.getElementById('chooseFileBtn')?.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', (e) => handleFiles(Array.from(e.target.files)));
-    const dropzone = document.getElementById('dropzone');
-    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.style.background = '#ffe0b5'; });
-    dropzone.addEventListener('dragleave', () => { dropzone.style.background = '#fff5e8'; });
-    dropzone.addEventListener('drop', (e) => { e.preventDefault(); dropzone.style.background = '#fff5e8'; const files = Array.from(e.dataTransfer.files); handleFiles(files); });
-
-    document.getElementById('generateFromFilesBtn')?.addEventListener('click', generateSmartContentFromFiles);
-    document.getElementById('generateRandomQuizBtn')?.addEventListener('click', showRandomQuiz);
-
-    // initial render
-    renderExamList();
-    renderUploadedFiles();
-    renderAutoNotesAndQuestions();
-    renderAllRevisionContent();
-
-    // extra fun: load sample tip
-    if(exams.length === 0 && uploadedFilesMeta.length === 0) {
-        setTimeout(() => {
-            if(confirm("👋 Want a quick demo? Add a fake exam or upload any picture to see magic!")) {
-                // optional sample to show features
+        function renderStreak() {
+            const sortedSessions = [...studySessions].sort((a,b) => new Date(a.date) - new Date(b.date));
+            let streak = 0;
+            let currentDate = new Date();
+            for (let i = 0; i < 30; i++) {
+                const dateStr = currentDate.toISOString().split('T')[0];
+                const hasSession = studySessions.some(s => s.date === dateStr);
+                if (hasSession) streak++;
+                else break;
+                currentDate.setDate(currentDate.getDate() - 1);
             }
-        }, 400);
-    }
-</script>
+            const streakPercent = Math.min(100, (streak / 30) * 100);
+            document.getElementById('streakBar').style.width = `${streakPercent}%`;
+            document.getElementById('streakText').innerHTML = `🔥 ${streak} day streak! Keep going! ${streak >= 7 ? 'Amazing!' : ''}`;
+        }
+
+        function renderTodayStudyLog() {
+            const container = document.getElementById('todayStudyLog');
+            if (!container) return;
+            const todaySessions = studySessions.filter(s => s.date === formatDate()).reverse();
+            if (todaySessions.length === 0) {
+                container.innerHTML = '<div class="exam-card">No study sessions logged today. Start the timer above!</div>';
+            } else {
+                container.innerHTML = todaySessions.map(s => `<div class="exam-card">📖 ${s.subject} - ${formatTime(s.duration)}</div>`).join('');
+            }
+        }
+
+        function renderFileList() {
+            const container = document.getElementById('fileList');
+            if (!container) return;
+            if (uploadedFiles.length === 0) {
+                container.innerHTML = '<div class="exam-card">No files uploaded yet.</div>';
+                return;
+            }
+            container.innerHTML = uploadedFiles.map(f => `<div class="exam-card">📄 ${escapeHtml(f.name)}</div>`).join('');
+        }
+
+        function renderGeneratedNotes() {
+            const container = document.getElementById('generatedNotes');
+            if (!container) return;
+            const recentQuestions = questions.slice(-8).reverse();
+            container.innerHTML = recentQuestions.map(q => `<div class="exam-card">💡 ${escapeHtml(q.text)}</div>`).join('') || '<div>No notes yet. Upload files and click Generate!</div>';
+        }
+
+        function renderAllQuestions() {
+            const container = document.getElementById('allQuestions');
+            if (!container) return;
+            if (questions.length === 0) {
+                container.innerHTML = '<div class="exam-card">No questions yet. Upload study materials!</div>';
+                return;
+            }
+            container.innerHTML = questions.slice().reverse().map(q => `
+                <div class="exam-card">
+                    <div><strong>❓ Question:</strong> ${escapeHtml(q.text)}</div>
+                    <div style="font-size:0.85rem; opacity:0.7;">💡 ${escapeHtml(q.hint || 'Review your materials')}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderAll() {
+            renderExamList();
+            renderTodayExams();
+            renderQuickStats();
+            renderStreak();
+            renderTodayStudyLog();
+            renderFileList();
+            renderGeneratedNotes();
+            renderAllQuestions();
+        }
+
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+        // ========== TAB SWITCHING ==========
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(tabId + 'Tab').classList.remove('hidden');
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
+            renderAll();
+        }
+
+        // ========== THEME ==========
+        function initTheme() {
+            const saved = localStorage.getItem('sb_theme') || 'light';
+            if (saved === 'dark') document.body.classList.add('dark');
+            document.getElementById('themeToggle').innerText = saved === 'dark' ? '☀️' : '🌙';
+        }
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            localStorage.setItem('sb_theme', isDark ? 'dark' : 'light');
+            document.getElementById('themeToggle').innerText = isDark ? '☀️' : '🌙';
+        }
+
+        // ========== EVENT LISTENERS ==========
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+        });
+        document.getElementById('addExamBtn').addEventListener('click', addExam);
+        document.getElementById('startTimer').addEventListener('click', startTimer);
+        document.getElementById('pauseTimer').addEventListener('click', pauseTimer);
+        document.getElementById('resetTimer').addEventListener('click', resetTimer);
+        document.getElementById('logStudyBtn').addEventListener('click', logStudySession);
+        document.getElementById('chooseFileBtn').addEventListener('click', () => document.getElementById('fileInput').click());
+        document.getElementById('fileInput').addEventListener('change', (e) => handleFiles(e.target.files));
+        document.getElementById('generateNotesBtn').addEventListener('click', generateQuestionsFromFiles);
+        document.getElementById('newQuizBtn').addEventListener('click', showRandomQuiz);
+        document.getElementById('showAnswerBtn').addEventListener('click', showAnswerHint);
+        document.getElementById('parentBtn').addEventListener('click', showParentDashboard);
+        document.getElementById('closeModalBtn').addEventListener('click', () => document.getElementById('parentModal').style.display = 'none');
+        document.getElementById('exportDataBtn').addEventListener('click', exportData);
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+        
+        // Upload zone
+        const uploadZone = document.getElementById('uploadZone');
+        uploadZone.addEventListener('dragover', (e) => e.preventDefault());
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            handleFiles(e.dataTransfer.files);
+        });
+        uploadZone.addEventListener('click', () => document.getElementById('fileInput').click());
+        
+        initTheme();
+        renderAll();
+        switchTab('home');
+        updateTimerDisplay();
+    </script>
 </body>
-</html>
+</html> 
