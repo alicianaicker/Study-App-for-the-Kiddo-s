@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Exam Buddy – Offline AI Study Assistant</title>
+<title>Exam Buddy – 100% Offline</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4ff;color:#1a1a2e;min-height:100vh;font-size:16px}
@@ -138,7 +138,7 @@ body.dark .qopt{background:#252538;border-color:#444;color:#eee}
 </head>
 <body>
 <div class="hdr">
-  <div class="logo">🚀 Exam Buddy</div>
+  <div class="logo">🚀 Exam Buddy (Offline)</div>
   <div class="hdr-r">
     <div class="stars" id="starsEl">⭐ 0</div>
     <button class="dtoggle" id="dtoggleEl" onclick="toggleDark()">🌙</button>
@@ -154,14 +154,25 @@ body.dark .qopt{background:#252538;border-color:#444;color:#eee}
   <button class="tb" onclick="goTab('quiz',this)">🎯 Quiz</button>
 </div>
 
+<!-- HOME -->
 <div class="pg on" id="pg-home"><div id="alertsEl"></div><div id="bannerEl"></div><div class="sg" id="statsEl"></div><div class="card bl"><strong>🗓️ Next 7 Days</strong><div id="homeExEl" style="margin-top:10px"></div></div><div class="card bg"><strong>💡 Tip of the Day</strong><p id="tipEl"></p></div></div>
+
+<!-- TIMETABLE -->
 <div class="pg" id="pg-tt"><div class="ptitle">📅 Timetable<div class="row"><div class="vt"><button class="vtb on" onclick="setView('list')">☰ List</button><button class="vtb" onclick="setView('cal')">📆 Cal</button></div><button class="btn bn bsm" onclick="openM('mAddEx')">➕ Add</button></div></div><div id="ttList"></div><div id="ttCal" style="display:none"><div class="card"><div class="chd"><button class="cnb" onclick="calMv(-1)">‹</button><h3 id="calLbl"></h3><button class="cnb" onclick="calMv(1)">›</button></div><div class="cgrid" id="calDow"></div><div class="cgrid" id="calGrid"></div></div><div id="calDetail"></div></div></div>
+
+<!-- SUBJECTS -->
 <div class="pg" id="pg-subs"><div class="ptitle">📚 Subjects <button class="btn bn bsm" onclick="openM('mAddSub')">➕ Add</button></div><div class="sgg" id="subjEl"></div></div>
+
+<!-- FLASHCARDS -->
 <div class="pg" id="pg-fc"><div class="ptitle">🃏 Flashcards</div><p style="font-size:.85rem;color:#888;margin-bottom:12px">Tap a card to flip it ✨</p><div class="card"><div style="font-size:.8rem;font-weight:800;margin-bottom:8px">Filter:</div><div class="fcsf" id="fcFilterEl"></div></div><div id="fcAreaEl"></div></div>
-<div class="pg" id="pg-up"><div class="ptitle">📸 Upload</div><p style="font-size:.85rem;color:#888;margin-bottom:12px">Upload any file (image, PDF, text). No API key needed – everything works offline!</p><div class="card"><div class="fg"><label>Subject name</label><input type="text" id="upSubEl" placeholder="e.g. Maths, Science" list="upSubList"><datalist id="upSubList"></datalist></div><div class="fg"><label>Topic (optional)</label><input type="text" id="upTopicEl" placeholder="e.g. Photosynthesis"></div><div class="dzone" id="dzoneEl"><div class="dico">📷</div><div class="dtxt">Click or drag & drop files (any size)</div><div class="dhnt">JPG, PNG, PDF, TXT – fully offline processing</div></div><input type="file" id="fileEl" accept="image/*,.pdf,.txt" multiple><div class="flist" id="flistEl"></div><div style="text-align:right"><button class="btn bp2" onclick="runUpload()">🤖 Generate Notes & Questions</button></div></div><div id="upResultEl"></div></div>
+
+<!-- UPLOAD (NO API) -->
+<div class="pg" id="pg-up"><div class="ptitle">📸 Upload</div><p style="font-size:.85rem;color:#888;margin-bottom:12px">Upload any PDF or text file – offline extraction & study notes.</p><div class="card"><div class="fg"><label>Subject name</label><input type="text" id="upSubEl" placeholder="e.g. Maths, Science" list="upSubList"><datalist id="upSubList"></datalist></div><div class="fg"><label>Topic (optional)</label><input type="text" id="upTopicEl" placeholder="e.g. Photosynthesis"></div><div class="dzone" id="dzoneEl"><div class="dico">📷</div><div class="dtxt">Click or drag & drop files (any size)</div><div class="dhnt">PDF, TXT – images can be added manually later</div></div><input type="file" id="fileEl" accept=".pdf,.txt,application/pdf,text/plain" multiple><div class="flist" id="flistEl"></div><div style="text-align:right"><button class="btn bp2" onclick="runUpload()">🤖 Generate Notes & Questions</button></div></div><div id="upResultEl"></div></div>
+
+<!-- QUIZ -->
 <div class="pg" id="pg-quiz"><div class="ptitle">🎯 Quiz!</div><div class="card" id="quizSetupEl"><div class="fg"><label>Subject (all if blank)</label><select id="quizSubEl"><option value="">— All subjects —</option></select></div><button class="btn br2" onclick="startQuiz()">🚀 Start Quiz!</button></div><div id="quizPlayEl" style="display:none"></div></div>
 
-<!-- Modals -->
+<!-- MODALS -->
 <div class="modal-bg" id="mAddEx"><div class="mbox"><div class="mhd"><h3>📅 Add Exam</h3><button class="mx" onclick="closeM('mAddEx')">✕</button></div><div class="fr"><div class="fg"><label>Subject</label><input type="text" id="exSub"></div><div class="fg"><label>Date</label><input type="date" id="exDate"></div></div><div class="fr"><div class="fg"><label>Time</label><input type="time" id="exTime"></div><div class="fg"><label>Room</label><input type="text" id="exRoom"></div></div><div class="fg"><label>Notes</label><textarea id="exNotes" rows="2"></textarea></div><div style="text-align:right"><button class="btn bn" onclick="saveExam()">✅ Save</button></div></div></div>
 <div class="modal-bg" id="mAddSub"><div class="mbox"><div class="mhd"><h3>📚 Add Subject</h3><button class="mx" onclick="closeM('mAddSub')">✕</button></div><div class="fg"><label>Name</label><input type="text" id="sNameEl"></div><div class="fg"><label>Emoji</label><input type="text" id="sEmojiEl"></div><div class="fg"><label>Colour</label><div class="swrow" id="swEl"></div></div><div style="text-align:right"><button class="btn bn" onclick="saveSub()">✅ Save</button></div></div></div>
 <div class="modal-bg" id="mSubDet"><div class="mbox"><div class="mhd"><h3 id="mSubTitleEl"></h3><button class="mx" onclick="closeM('mSubDet')">✕</button></div><div id="topicListEl"></div><hr class="divdr"><div style="font-weight:900;margin-bottom:10px">➕ Add Topic</div><div class="fg"><label>Topic Name</label><input type="text" id="tNameEl"></div><div class="fg"><label>Notes</label><textarea id="tNotesEl" rows="3"></textarea></div><div style="display:flex;gap:8px"><button class="btn bg2 bsm" onclick="saveTopic()">💾 Save</button><button class="btn bp2 bsm" onclick="aiTopicQ()">🤖 AI Questions</button></div><div id="tAiOutEl"></div></div></div>
@@ -169,14 +180,14 @@ body.dark .qopt{background:#252538;border-color:#444;color:#eee}
 <script>
 'use strict';
 
-// ---------- DATA LAYER ----------
+// ---------- DATA ----------
 function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function ss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-var exams = ls('eb7_exams',[]);
-var subjects = ls('eb7_subs',[]);
-var stars = ls('eb7_stars',0);
-var qBank = ls('eb7_qbank',[]);
-var dark = ls('eb7_dark',false);
+var exams = ls('eb8_exams',[]);
+var subjects = ls('eb8_subs',[]);
+var stars = ls('eb8_stars',0);
+var qBank = ls('eb8_qbank',[]);
+var dark = ls('eb8_dark',false);
 
 var activeSub=null, selCol='#ff6b6b', pendingFiles=[];
 var calY, calM, ttView='list';
@@ -192,56 +203,41 @@ window.addEventListener('load', async function(){
   let n=new Date(); calY=n.getFullYear(); calM=n.getMonth();
   buildSwatches();
   if(dark){document.body.classList.add('dark');document.getElementById('dtoggleEl').textContent='☀️';}
-  // configure pdf.js worker
   if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
   renderAll(); renderTip(); setupDrop();
 });
 function renderAll(){renderHome();renderTT();renderSubs();renderFC();updateSels();renderStars();}
-function toggleDark(){dark=!dark;document.body.classList.toggle('dark',dark);document.getElementById('dtoggleEl').textContent=dark?'☀️':'🌙';ss('eb7_dark',dark);}
+function toggleDark(){dark=!dark;document.body.classList.toggle('dark',dark);document.getElementById('dtoggleEl').textContent=dark?'☀️':'🌙';ss('eb8_dark',dark);}
 function goTab(id,el){document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));document.getElementById('pg-'+id).classList.add('on');if(el)el.classList.add('on');if(id==='home')renderHome();if(id==='fc')renderFC();if(id==='tt')renderTT();if(id==='quiz')resetQuiz();}
-function addStars(n){stars+=n;ss('eb7_stars',stars);renderStars();if(n>0)confetti();}
+function addStars(n){stars+=n;ss('eb8_stars',stars);renderStars();if(n>0)confetti();}
 function renderStars(){document.getElementById('starsEl').textContent='⭐ '+stars;}
 function renderTip(){document.getElementById('tipEl').innerHTML=TIPS[Math.floor(Date.now()/86400000)%TIPS.length];}
 
-// home helpers
+// home helpers (same as before, compact)
 function dLocal(s){let p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
 function fmtD(s){let d=dLocal(s);return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]+' '+d.getDate()+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];}
 function dbox(s){let d=dLocal(s);return `<div class="edbox"><div class="ed">${d.getDate()}</div><div class="em">${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]}</div></div>`;}
-function renderHome(){
-  let now=new Date();now.setHours(0,0,0,0); let tom=new Date(now);tom.setDate(tom.getDate()+1); let in7=new Date(now);in7.setDate(in7.getDate()+7);
-  let sorted=exams.slice().sort((a,b)=>dLocal(a.date)-dLocal(b.date));
-  let ah='';
-  sorted.forEach(e=>{let d=dLocal(e.date);if(+d===+now) ah+=`<div class="at"><div class="ai">🚨</div><div><div class="an">${H(e.subject)} – TODAY!</div><div class="as">${e.time?'🕐 '+e.time+' ':''}${e.room?'📍 '+e.room:''}</div></div></div>`; else if(+d===+tom) ah+=`<div class="at2"><div class="ai">⏰</div><div><div class="an">${H(e.subject)} – Tomorrow!</div><div class="as">${e.time?'🕐 '+e.time+' ':''}${e.room?'📍 '+e.room:''}</div></div></div>`;});
-  document.getElementById('alertsEl').innerHTML=ah;
-  let next=sorted.find(e=>dLocal(e.date)>=now);
-  if(next){let diff=Math.ceil((dLocal(next.date)-now)/864e5);document.getElementById('bannerEl').innerHTML=`<div class="nb"><div><div class="nnum">${diff===0?'🔥':diff}</div><div style="font-size:.75rem">${diff===0?'TODAY':'days away'}</div></div><div><div class="nsubj">${H(next.subject)}</div><div class="ndate">${fmtD(next.date)}${next.time?' · '+next.time:''}</div><div class="ndate">${next.notes||"You've got this! 🍀"}</div></div></div>`;}else document.getElementById('bannerEl').innerHTML='';
-  let tt=subjects.reduce((s,x)=>s+(x.topics||[]).length,0);
-  document.getElementById('statsEl').innerHTML=`<div class="sb"><div class="sn" style="color:#ff6b6b">${exams.length}</div><div class="sl">📅 Exams</div></div><div class="sb"><div class="sn" style="color:#6ec6f5">${subjects.length}</div><div class="sl">📚 Subjects</div></div><div class="sb"><div class="sn" style="color:#6bcb77">${tt}</div><div class="sl">📝 Topics</div></div><div class="sb"><div class="sn" style="color:#ffd93d">${stars}</div><div class="sl">⭐ Stars</div></div>`;
-  let up=sorted.filter(e=>{let d=dLocal(e.date);return d>=now&&d<=in7;});
-  let CC=['#ff6b6b','#ffd93d','#6bcb77','#6ec6f5','#c77dff'];
-  document.getElementById('homeExEl').innerHTML=up.length?up.map((e,i)=>`<div class="eibox" style="border-left-color:${CC[i%CC.length]}">${dbox(e.date)}<div class="ei"><div class="en">${H(e.subject)}</div><div class="emt">${e.time?'🕐 '+e.time+' ':''}${e.room?'📍 '+e.room:''}</div></div><span class="bdg ${Math.ceil((dLocal(e.date)-now)/864e5)<=1?'bdr':Math.ceil((dLocal(e.date)-now)/864e5)<=3?'bdo':'bdg2'}">${Math.ceil((dLocal(e.date)-now)/864e5)===0?'TODAY!':Math.ceil((dLocal(e.date)-now)/864e5)+'d'}</span></div>`).join(''):'<div class="empty">No exams in next 7 days 🎉</div>';
-}
+function renderHome(){let now=new Date();now.setHours(0,0,0,0); let tom=new Date(now);tom.setDate(tom.getDate()+1); let in7=new Date(now);in7.setDate(in7.getDate()+7); let sorted=exams.slice().sort((a,b)=>dLocal(a.date)-dLocal(b.date)); let ah=''; sorted.forEach(e=>{let d=dLocal(e.date);if(+d===+now) ah+=`<div class="at"><div class="ai">🚨</div><div><div class="an">${H(e.subject)} – TODAY!</div><div class="as">${e.time?'🕐 '+e.time+' ':''}${e.room?'📍 '+e.room:''}</div></div></div>`; else if(+d===+tom) ah+=`<div class="at2"><div class="ai">⏰</div><div><div class="an">${H(e.subject)} – Tomorrow!</div><div class="as">${e.time?'🕐 '+e.time+' ':''}${e.room?'📍 '+e.room:''}</div></div></div>`;}); document.getElementById('alertsEl').innerHTML=ah; let next=sorted.find(e=>dLocal(e.date)>=now); if(next){let diff=Math.ceil((dLocal(next.date)-now)/864e5);document.getElementById('bannerEl').innerHTML=`<div class="nb"><div><div class="nnum">${diff===0?'🔥':diff}</div><div style="font-size:.75rem">${diff===0?'TODAY':'days away'}</div></div><div><div class="nsubj">${H(next.subject)}</div><div class="ndate">${fmtD(next.date)}${next.time?' · '+next.time:''}</div><div class="ndate">${next.notes||"You've got this! 🍀"}</div></div></div>`;}else document.getElementById('bannerEl').innerHTML=''; let tt=subjects.reduce((s,x)=>s+(x.topics||[]).length,0); document.getElementById('statsEl').innerHTML=`<div class="sb"><div class="sn" style="color:#ff6b6b">${exams.length}</div><div class="sl">📅 Exams</div></div><div class="sb"><div class="sn" style="color:#6ec6f5">${subjects.length}</div><div class="sl">📚 Subjects</div></div><div class="sb"><div class="sn" style="color:#6bcb77">${tt}</div><div class="sl">📝 Topics</div></div><div class="sb"><div class="sn" style="color:#ffd93d">${stars}</div><div class="sl">⭐ Stars</div></div>`; let up=sorted.filter(e=>{let d=dLocal(e.date);return d>=now&&d<=in7;}); let CC=['#ff6b6b','#ffd93d','#6bcb77','#6ec6f5','#c77dff']; document.getElementById('homeExEl').innerHTML=up.length?up.map((e,i)=>`<div class="eibox" style="border-left-color:${CC[i%CC.length]}">${dbox(e.date)}<div class="ei"><div class="en">${H(e.subject)}</div><div class="emt">${e.time?'🕐 '+e.time+' ':''}${e.room?'📍 '+e.room:''}</div></div><span class="bdg ${Math.ceil((dLocal(e.date)-now)/864e5)<=1?'bdr':Math.ceil((dLocal(e.date)-now)/864e5)<=3?'bdo':'bdg2'}">${Math.ceil((dLocal(e.date)-now)/864e5)===0?'TODAY!':Math.ceil((dLocal(e.date)-now)/864e5)+'d'}</span></div>`).join(''):'<div class="empty">No exams in next 7 days 🎉</div>';}
 function setView(v){ttView=v;document.getElementById('ttList').style.display=v==='list'?'block':'none';document.getElementById('ttCal').style.display=v==='cal'?'block':'none';document.getElementById('vListBtn').classList.toggle('on',v==='list');document.getElementById('vCalBtn').classList.toggle('on',v==='cal');if(v==='cal')renderCal();}
-function saveExam(){let subj=document.getElementById('exSub').value.trim(),date=document.getElementById('exDate').value;if(!subj||!date){alert('Fill subject and date');return;}exams.push({id:Date.now(),subject:subj,date:date,time:document.getElementById('exTime').value,room:document.getElementById('exRoom').value.trim(),notes:document.getElementById('exNotes').value.trim()});ss('eb7_exams',exams);closeM('mAddEx');['exSub','exDate','exTime','exRoom','exNotes'].forEach(id=>document.getElementById(id).value='');renderAll();addStars(5);}
-function delExam(id){if(!confirm('Delete?'))return;exams=exams.filter(e=>e.id!==id);ss('eb7_exams',exams);renderAll();}
+function saveExam(){let subj=document.getElementById('exSub').value.trim(),date=document.getElementById('exDate').value;if(!subj||!date){alert('Fill subject and date');return;}exams.push({id:Date.now(),subject:subj,date:date,time:document.getElementById('exTime').value,room:document.getElementById('exRoom').value.trim(),notes:document.getElementById('exNotes').value.trim()});ss('eb8_exams',exams);closeM('mAddEx');['exSub','exDate','exTime','exRoom','exNotes'].forEach(id=>document.getElementById(id).value='');renderAll();addStars(5);}
+function delExam(id){if(!confirm('Delete?'))return;exams=exams.filter(e=>e.id!==id);ss('eb8_exams',exams);renderAll();}
 function renderTT(){let now=new Date();now.setHours(0,0,0,0);let sorted=exams.slice().sort((a,b)=>dLocal(a.date)-dLocal(b.date));let CC=['#ff6b6b','#ffd93d','#6bcb77','#6ec6f5','#c77dff'];document.getElementById('ttList').innerHTML=sorted.length?sorted.map((e,i)=>{let diff=Math.ceil((dLocal(e.date)-now)/864e5);let lbl=diff<0?'Past':diff===0?'TODAY!':diff+'d left';return `<div class="eibox" style="border-left-color:${CC[i%CC.length]}">${dbox(e.date)}<div class="ei"><div class="en">${H(e.subject)}</div><div class="emt">${e.time?'🕐 '+e.time+' ':''}${e.room?'📍 '+e.room:''}</div>${e.notes?`<div class="emt">📌 ${H(e.notes)}</div>`:''}</div><div><span class="bdg" style="background:#${diff<0?'aaa':diff===0?'ff6b6b':diff<=3?'ff6b6b':diff<=7?'ffd93d':'6bcb77'}22;color:#${diff<0?'aaa':diff===0?'ff6b6b':diff<=3?'ff6b6b':diff<=7?'ffd93d':'6bcb77'}">${lbl}</span><button class="btn bgh bsm" onclick="delExam(${e.id})">🗑️</button></div></div>`;}).join(''):'<div class="empty">No exams yet</div>';if(ttView==='cal')renderCal();}
 function calMv(d){calM+=d;if(calM>11){calM=0;calY++;}if(calM<0){calM=11;calY--;}renderCal();}
 function renderCal(){let MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];document.getElementById('calLbl').textContent=MN[calM]+' '+calY;document.getElementById('calDow').innerHTML=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<div class="cdow">${d}</div>`).join('');let today=new Date();today.setHours(0,0,0,0);let fd=new Date(calY,calM,1);let dow=fd.getDay()-1;if(dow<0)dow=6;let dim=new Date(calY,calM+1,0).getDate();let pd=new Date(calY,calM,0).getDate();let byD={};exams.forEach(e=>{if(!byD[e.date])byD[e.date]=[];byD[e.date].push(e);});let cells=[];for(let i=dow-1;i>=0;i--)cells.push({d:pd-i,cur:false});for(let dd=1;dd<=dim;dd++){let ds=calY+'-'+(calM+1<10?'0':'')+(calM+1)+'-'+(dd<10?'0':'')+dd;let dt=new Date(calY,calM,dd);dt.setHours(0,0,0,0);cells.push({d:dd,cur:true,ds:ds,td:+dt===+today,ex:byD[ds]||[]});}let nx=1;while(cells.length%7!==0)cells.push({d:nx++,cur:false});let CL=['#ff6b6b','#ffd93d','#6bcb77','#6ec6f5','#c77dff'];document.getElementById('calGrid').innerHTML=cells.map(c=>{if(!c.cur)return `<div class="ccell om"><span class="cdn">${c.d}</span></div>`;let cls=(c.td?' td':'')+(c.ex.length?' he':'');let oc=c.ex.length?` onclick="showCalDay('${c.ds}')"`:'';return `<div class="ccell${cls}"${oc}><span class="cdn">${c.d}</span>${c.ex.map((e,i)=>`<span class="cpill" style="background:${CL[i%CL.length]}">${H(e.subject)}</span>`).join('')}</div>`;}).join('');}
 function showCalDay(ds){let ex=exams.filter(e=>e.date===ds);let el=document.getElementById('calDetail');if(!ex.length){el.innerHTML='';return;}el.innerHTML=`<div class="card bp"><div style="font-weight:900">📅 ${fmtD(ds)}</div>${ex.map(e=>`<div class="eibox">${dbox(e.date)}<div class="ei"><div class="en">${H(e.subject)}</div><div class="emt">${e.time?'🕐 '+e.time+' ':''}${e.room?'📍 '+e.room:''}</div></div><button class="btn bgh bsm" onclick="delExam(${e.id})">🗑️</button></div>`).join('')}</div>`;}
 function buildSwatches(){document.getElementById('swEl').innerHTML=COLS.map((c,i)=>`<div class="sw${i===0?' pk':''}" style="background:${c}" onclick="pickSw('${c}',this)"></div>`).join('');}
 function pickSw(c,el){selCol=c;document.querySelectorAll('.sw').forEach(s=>s.classList.remove('pk'));el.classList.add('pk');}
-function saveSub(){let name=document.getElementById('sNameEl').value.trim(),emoji=document.getElementById('sEmojiEl').value.trim()||EMJS[subjects.length%EMJS.length];if(!name){alert('Enter name');return;}subjects.push({id:Date.now(),name:name,emoji:emoji,color:selCol,topics:[]});ss('eb7_subs',subjects);closeM('mAddSub');document.getElementById('sNameEl').value='';document.getElementById('sEmojiEl').value='';renderAll();addStars(5);}
-function delSub(id){if(!confirm('Delete subject?'))return;subjects=subjects.filter(s=>s.id!==id);ss('eb7_subs',subjects);renderAll();}
+function saveSub(){let name=document.getElementById('sNameEl').value.trim(),emoji=document.getElementById('sEmojiEl').value.trim()||EMJS[subjects.length%EMJS.length];if(!name){alert('Enter name');return;}subjects.push({id:Date.now(),name:name,emoji:emoji,color:selCol,topics:[]});ss('eb8_subs',subjects);closeM('mAddSub');document.getElementById('sNameEl').value='';document.getElementById('sEmojiEl').value='';renderAll();addStars(5);}
+function delSub(id){if(!confirm('Delete subject?'))return;subjects=subjects.filter(s=>s.id!==id);ss('eb8_subs',subjects);renderAll();}
 function renderSubs(){let g=document.getElementById('subjEl');if(!subjects.length){g.innerHTML='<div class="empty">Add your first subject!</div>';return;}g.innerHTML=subjects.map(s=>{let done=(s.topics||[]).filter(t=>t.done).length;let total=(s.topics||[]).length;let pct=total?Math.round(done/total*100):0;return `<div class="sc" style="border-top-color:${s.color}" onclick="openSub(${s.id})"><div class="se">${s.emoji}</div><div class="sname">${H(s.name)}</div><div class="scnt">${total} topic${total!==1?'s':''}</div><div class="pb"><div class="pf" style="width:${pct}%;background:${s.color}"></div></div><div class="pp">${pct}% covered</div><button class="btn bgh bsm" style="margin-top:8px;width:100%" onclick="event.stopPropagation();delSub(${s.id})">🗑️ Remove</button></div>`;}).join('');}
 function updateSels(){let dl=document.getElementById('upSubList');if(dl)dl.innerHTML=subjects.map(s=>`<option value="${H(s.name)}">`).join('');let qs=document.getElementById('quizSubEl');if(qs)qs.innerHTML='<option value="">— All subjects —</option>'+subjects.map(s=>`<option value="${s.id}">${s.emoji} ${H(s.name)}</option>`).join('');}
 function openSub(id){activeSub=id;let s=subjects.find(x=>x.id===id);document.getElementById('mSubTitleEl').textContent=s.emoji+' '+s.name;document.getElementById('tNameEl').value='';document.getElementById('tNotesEl').value='';document.getElementById('tAiOutEl').innerHTML='';renderTopics(s);openM('mSubDet');}
 function renderTopics(s){let el=document.getElementById('topicListEl');if(!(s.topics||[]).length){el.innerHTML='<div class="empty">No topics yet!</div>';return;}el.innerHTML=s.topics.map((t,i)=>`<div class="ti"><div class="thd"><div class="tttl">📝 ${H(t.title)}</div><div class="tctl"><label><input type="checkbox" ${t.done?'checked':''} onchange="toggleT(${s.id},${i},this.checked)"> Done</label><button class="btn bgh bsm" onclick="delT(${s.id},${i})">🗑️</button></div></div>${t.notes?`<div class="tnts">${H(t.notes)}</div>`:''}${t.questions&&t.questions.length?`<div class="aichip">🤖 AI Questions</div>${t.questions.map(q=>`<div class="qbox">❓ ${H(q)}</div>`).join('')}`:''}</div>`).join('');}
-function toggleT(sid,i,v){let s=subjects.find(x=>x.id===sid);s.topics[i].done=v;ss('eb7_subs',subjects);if(v)addStars(2);renderSubs();}
-function delT(sid,i){let s=subjects.find(x=>x.id===sid);s.topics.splice(i,1);ss('eb7_subs',subjects);renderTopics(s);renderSubs();renderFC();}
-function saveTopic(){let title=document.getElementById('tNameEl').value.trim(),notes=document.getElementById('tNotesEl').value.trim();if(!title){alert('Enter topic name');return;}let s=subjects.find(x=>x.id===activeSub);s.topics.push({title:title,notes:notes,done:false,questions:[]});ss('eb7_subs',subjects);renderTopics(s);renderSubs();renderFC();document.getElementById('tNameEl').value='';document.getElementById('tNotesEl').value='';addStars(3);}
-function aiTopicQ(){let title=document.getElementById('tNameEl').value.trim(),notes=document.getElementById('tNotesEl').value.trim();if(!title&&!notes){alert('Enter topic or notes');return;}let s=subjects.find(x=>x.id===activeSub);let out=document.getElementById('tAiOutEl');out.innerHTML='<div class="ldbox"><div class="ldspin">🤖</div><div class="ldtxt">Generating questions...</div></div>';setTimeout(()=>{let qs=generateQuestionsOffline(title,notes);s.topics.push({title:title||'Topic',notes:notes,done:false,questions:qs});ss('eb7_subs',subjects);renderTopics(s);renderSubs();renderFC();out.innerHTML=`<p style="color:#6bcb77">✅ Saved with ${qs.length} questions!</p>`;addStars(5);setTimeout(()=>out.innerHTML='',2000);},200);}
-function generateQuestionsOffline(title,notes){let txt=(title+' '+notes).toLowerCase();let qs=[];if(txt.includes('what')) qs.push(`What is the main idea of "${title}"?`);else qs.push(`Explain the key concepts of ${title}.`);if(txt.includes('why')) qs.push(`Why is ${title} important?`);else qs.push(`Why should we study ${title}?`);qs.push(`List three important facts about ${title}.`);qs.push(`How can you apply ${title} in real life?`);qs.push(`Describe one example related to ${title}.`);return qs.slice(0,5);}
-
+function toggleT(sid,i,v){let s=subjects.find(x=>x.id===sid);s.topics[i].done=v;ss('eb8_subs',subjects);if(v)addStars(2);renderSubs();}
+function delT(sid,i){let s=subjects.find(x=>x.id===sid);s.topics.splice(i,1);ss('eb8_subs',subjects);renderTopics(s);renderSubs();renderFC();}
+function saveTopic(){let title=document.getElementById('tNameEl').value.trim(),notes=document.getElementById('tNotesEl').value.trim();if(!title){alert('Enter topic name');return;}let s=subjects.find(x=>x.id===activeSub);s.topics.push({title:title,notes:notes,done:false,questions:[]});ss('eb8_subs',subjects);renderTopics(s);renderSubs();renderFC();document.getElementById('tNameEl').value='';document.getElementById('tNotesEl').value='';addStars(3);}
+function aiTopicQ(){let title=document.getElementById('tNameEl').value.trim(),notes=document.getElementById('tNotesEl').value.trim();if(!title&&!notes){alert('Enter topic or notes');return;}let s=subjects.find(x=>x.id===activeSub);let out=document.getElementById('tAiOutEl');out.innerHTML='<div class="ldbox"><div class="ldspin">🤖</div><div class="ldtxt">Generating questions...</div></div>';setTimeout(()=>{let qs=generateSimpleQuestions(title,notes);s.topics.push({title:title||'Topic',notes:notes,done:false,questions:qs});ss('eb8_subs',subjects);renderTopics(s);renderSubs();renderFC();out.innerHTML=`<p style="color:#6bcb77">✅ Saved with ${qs.length} questions!</p>`;addStars(5);setTimeout(()=>out.innerHTML='',2000);},200);}
+function generateSimpleQuestions(title,notes){let txt=(title+' '+notes).toLowerCase();let qs=[];qs.push(`What is the main idea of "${title}"?`);qs.push(`List three key facts about ${title}.`);qs.push(`Why is ${title} important?`);qs.push(`How would you apply this knowledge in real life?`);qs.push(`Describe one example related to ${title}.`);return qs;}
 // flashcards
 function buildFcCards(fid){fcCards=[];subjects.forEach(s=>{if(fid&&s.id!=fid)return;(s.topics||[]).forEach(t=>{if(t.notes&&t.notes.trim())fcCards.push({q:t.title,a:t.notes,subj:s.name,em:s.emoji});(t.questions||[]).forEach(q=>fcCards.push({q:q,a:t.notes||'Review: '+t.title,subj:s.name,em:s.emoji}));});});if(fcCards.length)fcCards.sort(()=>Math.random()-.5);fcIdx=0;}
 function renderFC(){document.getElementById('fcFilterEl').innerHTML=`<button class="fcsfb${fcFilter===''?' on':''}" onclick="setFcF('')">All</button>`+subjects.map(s=>`<button class="fcsfb${String(fcFilter)===String(s.id)?' on':''}" onclick="setFcF(${s.id})">${s.emoji} ${H(s.name)}</button>`).join('');buildFcCards(fcFilter);let area=document.getElementById('fcAreaEl');if(!fcCards.length){area.innerHTML='<div class="empty">Add topics with notes first!</div>';return;}renderFcCard();}
@@ -251,10 +247,10 @@ function fcPrev(){fcIdx=(fcIdx-1+fcCards.length)%fcCards.length;renderFcCard();}
 function fcNext(){fcIdx=(fcIdx+1)%fcCards.length;renderFcCard();}
 function fcKnew(){addStars(2);fcNext();}
 
-// ---------- FILE UPLOAD & OFFLINE PROCESSING ----------
+// ---------- OFFLINE UPLOAD (NO API) ----------
 function setupDrop(){let zone=document.getElementById('dzoneEl'),inp=document.getElementById('fileEl');zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('ov');});zone.addEventListener('dragleave',()=>zone.classList.remove('ov'));zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('ov');readFiles(e.dataTransfer.files);});inp.addEventListener('change',()=>{readFiles(inp.files);inp.value='';});}
 function readFiles(files){Array.from(files).forEach(f=>{let reader=new FileReader();reader.onload=e=>{pendingFiles.push({name:f.name,type:f.type,data:e.target.result,size:f.size});renderFlist();};reader.readAsDataURL(f);});}
-function renderFlist(){let container=document.getElementById('flistEl');if(!pendingFiles.length){container.innerHTML='';return;}container.innerHTML=pendingFiles.map((f,i)=>`<div class="frow"><span>${f.type.includes('pdf')?'📄':f.type.includes('image')?'🖼️':'📁'}</span><span style="flex:1">${H(f.name)} (${(f.size/1024/1024).toFixed(2)} MB)</span><button class="btn bgh bsm" onclick="removeFile(${i})">✕</button></div>`).join('');}
+function renderFlist(){let container=document.getElementById('flistEl');if(!pendingFiles.length){container.innerHTML='';return;}container.innerHTML=pendingFiles.map((f,i)=>`<div class="frow"><span>${f.type.includes('pdf')?'📄':f.type.includes('text')?'📝':'📁'}</span><span style="flex:1">${H(f.name)} (${(f.size/1024/1024).toFixed(2)} MB)</span><button class="btn bgh bsm" onclick="removeFile(${i})">✕</button></div>`).join('');}
 function removeFile(idx){pendingFiles.splice(idx,1);renderFlist();}
 
 async function runUpload(){
@@ -264,31 +260,31 @@ async function runUpload(){
   if(!subjectName){alert('Enter subject name');return;}
   if(!pendingFiles.length){alert('Select files');return;}
   let sub=subjects.find(s=>s.name.toLowerCase()===subjectName.toLowerCase());
-  if(!sub){sub={id:Date.now(),name:subjectName,emoji:EMJS[subjects.length%EMJS.length],color:COLS[subjects.length%COLS.length],topics:[]};subjects.push(sub);ss('eb7_subs',subjects);renderSubs();updateSels();}
-  out.innerHTML='<div class="ldbox"><div class="ldspin">🤖</div><div class="ldtxt">Processing files (offline)...<br><small>Extracting text from PDFs, images, and documents</small></div></div>';
+  if(!sub){sub={id:Date.now(),name:subjectName,emoji:EMJS[subjects.length%EMJS.length],color:COLS[subjects.length%COLS.length],topics:[]};subjects.push(sub);ss('eb8_subs',subjects);renderSubs();updateSels();}
+  out.innerHTML='<div class="ldbox"><div class="ldspin">🤖</div><div class="ldtxt">Extracting text (offline)...<br><small>This may take a moment for large PDFs</small></div></div>';
   try{
     let combinedText='';
     for(let f of pendingFiles){
-      let txt=await extractTextFromFile(f);
+      let txt=await extractTextLocal(f);
       if(txt) combinedText+=txt+'\n\n';
     }
-    if(!combinedText.trim()) combinedText='[No readable text could be extracted. You can manually add notes in the Subjects tab.]';
-    let studyMaterial = generateStudyMaterial(subjectName, topic, combinedText);
-    sub.topics.push({title:studyMaterial.title, notes:studyMaterial.notes, done:false, questions:studyMaterial.questions});
-    ss('eb7_subs',subjects);
-    if(studyMaterial.quiz && studyMaterial.quiz.length){
-      studyMaterial.quiz.forEach(q=>{qBank.push({question:q.question, options:q.options, answer:q.answer, subject:sub.name});});
-      ss('eb7_qbank',qBank);
+    if(!combinedText.trim()) combinedText='[No readable text found. Add notes manually in Subjects tab.]';
+    let study = generateLocalStudy(subjectName, topic, combinedText);
+    sub.topics.push({title:study.title, notes:study.notes, done:false, questions:study.questions});
+    ss('eb8_subs',subjects);
+    if(study.quiz && study.quiz.length){
+      study.quiz.forEach(q=>{qBank.push({question:q.question, options:q.options, answer:q.answer, subject:sub.name});});
+      ss('eb8_qbank',qBank);
     }
     renderSubs(); updateSels(); renderFC();
-    out.innerHTML=`<div class="card bp"><div style="font-weight:900">🤖 ${H(studyMaterial.title)}</div><div style="font-size:.85rem;white-space:pre-wrap">${H(studyMaterial.notes)}</div>${studyMaterial.questions.length?`<div class="aichip">❓ ${studyMaterial.questions.length} questions</div>${studyMaterial.questions.map(q=>`<div class="qbox">❓ ${H(q)}</div>`).join('')}`:''}<p style="color:#6bcb77">✅ Saved to ${sub.emoji} ${H(sub.name)}! +15 ⭐</p></div>`;
+    out.innerHTML=`<div class="card bp"><div style="font-weight:900">🤖 ${H(study.title)}</div><div style="font-size:.85rem;white-space:pre-wrap;margin-top:8px">${H(study.notes)}</div>${study.questions.length?`<div class="aichip" style="margin-top:8px">❓ ${study.questions.length} questions</div>${study.questions.map(q=>`<div class="qbox">❓ ${H(q)}</div>`).join('')}`:''}<p style="color:#6bcb77;margin-top:10px">✅ Saved to ${sub.emoji} ${H(sub.name)}! +15 ⭐</p></div>`;
     pendingFiles=[]; renderFlist();
     document.getElementById('upTopicEl').value=''; document.getElementById('upSubEl').value='';
     addStars(15);
-  }catch(err){ console.error(err); out.innerHTML=`<div class="card br"><p style="color:#ff6b6b">❌ Failed: ${H(err.message)}</p><p style="font-size:.8rem">💡 For images: please add notes manually. For PDFs, ensure it contains extractable text.</p></div>`; }
+  }catch(err){ console.error(err); out.innerHTML=`<div class="card br"><p style="color:#ff6b6b">❌ Failed: ${H(err.message)}</p><p>💡 For images: please add notes manually in the Subjects tab. For PDFs, ensure it contains extractable text.</p></div>`; }
 }
 
-async function extractTextFromFile(file){
+async function extractTextLocal(file){
   let dataUrl=file.data, parts=dataUrl.split(','), b64=parts[1];
   let type=file.type, name=file.name;
   if(type==='text/plain' || name.endsWith('.txt')){
@@ -299,7 +295,7 @@ async function extractTextFromFile(file){
     let pdfData = atob(b64);
     let loadingTask = pdfjsLib.getDocument({data: pdfData});
     let pdf = await loadingTask.promise;
-    let maxPages = Math.min(pdf.numPages, 20);
+    let maxPages = Math.min(pdf.numPages, 30);
     let fullText='';
     for(let i=1;i<=maxPages;i++){
       let page=await pdf.getPage(i);
@@ -310,52 +306,50 @@ async function extractTextFromFile(file){
     return fullText || '[No extractable text in PDF]';
   }
   if(type.startsWith('image/')){
-    return `[Image file: ${name}. Offline OCR not available. Please review the image and add notes manually.]`;
+    return `[Image: ${name}. Offline OCR not available. Please review and add notes manually.]`;
   }
-  return `[File: ${name} – no text extraction available for this type]`;
+  return `[File: ${name} – no text extraction available]`;
 }
 
-function generateStudyMaterial(subject, topic, rawText){
+function generateLocalStudy(subject, topic, rawText){
   let title = topic || `${subject} Notes`;
-  let sentences = rawText.split(/[.!?]+/).map(s=>s.trim()).filter(s=>s.length>20);
-  let keywords = extractKeywords(rawText);
+  let sentences = rawText.split(/[.!?]+/).map(s=>s.trim()).filter(s=>s.length>25);
   let notes = '';
   if(sentences.length){
     notes = '• ' + sentences.slice(0,6).join('\n• ');
   } else {
-    notes = `• Based on your uploaded file about ${subject}.\n• Review the content for key facts.\n• Add more details in the Subjects tab.`;
+    notes = `• Based on your upload about ${subject}.\n• Key points can be added manually.\n• Use the Subjects tab to add more details.`;
   }
   let questions = [];
   if(sentences.length>0){
     questions.push(`What is the main topic of "${title}"?`);
+    let keywords = extractKeywordsLocal(rawText);
     if(keywords.length) questions.push(`Explain the meaning of: ${keywords.slice(0,2).join(', ')}.`);
-    questions.push(`List three important points from this material.`);
-    questions.push(`How does this relate to everyday life?`);
+    questions.push(`List three important facts from this material.`);
+    questions.push(`How does this relate to real life?`);
     questions.push(`Summarize the key idea in one sentence.`);
   } else {
     questions = [`What can you learn from ${title}?`, `Why is ${subject} important?`, `Describe one fact you remember.`, `How would you explain this to a friend?`, `What question would you ask the teacher?`];
   }
   let quiz = [];
-  if(sentences.length>=3){
-    let qText = sentences[0].slice(0,100);
-    quiz.push({question: `Based on the material: ${qText}?`, options:['True','False','Maybe','Not sure'], answer:0});
-    quiz.push({question: `Which of these best describes ${title}?`, options:['Concept','Process','Fact','All of the above'], answer:3});
-    quiz.push({question: `What is a key takeaway from ${title}?`, options:[sentences[1]?.slice(0,60)||'Important','Not important','Irrelevant','None'], answer:0});
+  if(sentences.length>=2){
+    let qText = sentences[0].slice(0,80);
+    quiz.push({question: `Based on the text: ${qText}...?`, options:['True','False','Not mentioned'], answer:0});
+    quiz.push({question: `What is a key takeaway from ${title}?`, options:[sentences[1]?.slice(0,60)||'Important','Irrelevant','None of the above'], answer:0});
   }
-  return {title, notes, questions: questions.slice(0,5), quiz: quiz.slice(0,3)};
+  return {title, notes, questions: questions.slice(0,5), quiz: quiz.slice(0,2)};
 }
-
-function extractKeywords(text){
+function extractKeywordsLocal(text){
   let words = text.toLowerCase().split(/\W+/).filter(w=>w.length>4);
   let freq={}; words.forEach(w=>freq[w]=(freq[w]||0)+1);
   let sorted=Object.entries(freq).sort((a,b)=>b[1]-a[1]);
-  return sorted.slice(0,5).map(k=>k[0]);
+  return sorted.slice(0,4).map(k=>k[0]);
 }
 
-// quiz functions (unchanged, works with qBank and topics)
-function startQuiz(){let sid=document.getElementById('quizSubEl').value;let pool=[];subjects.forEach(s=>{if(sid&&s.id!=sid)return;(s.topics||[]).forEach(t=>{if(t.questions&&t.questions.length)t.questions.forEach(q=>pool.push({question:q,subject:s.name,type:'open'}));});});qBank.forEach(q=>{if(sid){let s=subjects.find(x=>x.id==sid);if(s&&q.subject!==s.name)return;}pool.push({question:q.question,options:q.options,answer:q.answer,subject:q.subject,type:'mc'});});if(pool.length===0){alert('No questions yet. Upload files or add topics.');return;}pool.sort(()=>Math.random()-.5);pool=pool.slice(0,10);qState={q:pool,idx:0,score:0,streak:0};document.getElementById('quizSetupEl').style.display='none';document.getElementById('quizPlayEl').style.display='block';showQQ();}
+// ---------- QUIZ ----------
+function startQuiz(){let sid=document.getElementById('quizSubEl').value;let pool=[];subjects.forEach(s=>{if(sid&&s.id!=sid)return;(s.topics||[]).forEach(t=>{if(t.questions&&t.questions.length)t.questions.forEach(q=>pool.push({question:q,subject:s.name,type:'open'}));});});qBank.forEach(q=>{if(sid){let s=subjects.find(x=>x.id==sid);if(s&&q.subject!==s.name)return;}pool.push({question:q.question,options:q.options,answer:q.answer,subject:q.subject,type:'mc'});});if(pool.length===0){alert('No questions yet. Upload a PDF or add topics manually.');return;}pool.sort(()=>Math.random()-.5);pool=pool.slice(0,10);qState={q:pool,idx:0,score:0,streak:0};document.getElementById('quizSetupEl').style.display='none';document.getElementById('quizPlayEl').style.display='block';showQQ();}
 function showQQ(){let q=qState.q,i=qState.idx;if(i>=q.length){endQuiz();return;}let qi=q[i],pct=Math.round(i/q.length*100);let h=`<div class="card"><div class="qprog"><div class="qpf" style="width:${pct}%"></div></div>${qState.streak>=2?`<div class="spill">🔥 ${qState.streak} streak!</div>`:''}<div class="qlbl">Q${i+1} of ${q.length} · ${qi.subject}</div><div class="qq">${H(qi.question)}</div>`;if(qi.type==='mc'&&qi.options){h+=`<div class="qopts">${qi.options.map((o,j)=>`<button class="qopt" onclick="answerMC(${j})">${H(o)}</button>`).join('')}</div><div class="qfb" id="qfbEl"></div>`;}else{h+=`<div class="qobtns"><button class="btn bg2" onclick="answerOpen(true)">✅ Knew it</button><button class="btn br2" onclick="answerOpen(false)">❌ Not sure</button></div>`;}h+=`</div>`;document.getElementById('quizPlayEl').innerHTML=h;}
-function answerMC(i){let q=qState.q[qState.idx],ok=i===q.answer;document.querySelectorAll('.qopt').forEach((b,j)=>{b.disabled=true;if(j===q.answer)b.classList.add('correct');else if(j===i&&!ok)b.classList.add('wrong');});let fb=document.getElementById('qfbEl');if(fb){fb.textContent=ok?'🎉 Correct! +2 stars':'😅 Keep going';fb.style.color=ok?'#6bcb77':'#ff6b6b';}if(ok){qState.score++;qState.streak++;addStars(2);}else qState.streak=0;setTimeout(()=>{qState.idx++;showQQ();},1400);}
+function answerMC(i){let q=qState.q[qState.idx],ok=i===q.answer;document.querySelectorAll('.qopt').forEach((b,j)=>{b.disabled=true;if(j===q.answer)b.classList.add('correct');else if(j===i&&!ok)b.classList.add('wrong');});let fb=document.getElementById('qfbEl');if(fb){fb.textContent=ok?'🎉 Correct! +2 stars':'😅 Keep practicing';fb.style.color=ok?'#6bcb77':'#ff6b6b';}if(ok){qState.score++;qState.streak++;addStars(2);}else qState.streak=0;setTimeout(()=>{qState.idx++;showQQ();},1400);}
 function answerOpen(k){if(k){qState.score++;qState.streak++;addStars(2);}else qState.streak=0;qState.idx++;showQQ();}
 function endQuiz(){let t=qState.q.length,s=qState.score,p=Math.round(s/t*100);document.getElementById('quizPlayEl').innerHTML=`<div class="card" style="text-align:center"><div style="font-size:3rem">${p>=80?'🏆':p>=50?'🎉':'📚'}</div><div style="font-size:1.4rem;font-weight:900">${p>=80?'Amazing!':p>=50?'Good work!':'Keep going!'}</div><div style="font-size:2rem;color:#c77dff">${s}/${t}</div><div>${p}% correct</div><button class="btn bn" onclick="resetQuiz()">🔄 Play Again</button></div>`;addStars(s*2);}
 function resetQuiz(){document.getElementById('quizSetupEl').style.display='block';document.getElementById('quizPlayEl').style.display='none';document.getElementById('quizPlayEl').innerHTML='';}
